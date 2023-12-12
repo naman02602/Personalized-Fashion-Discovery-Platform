@@ -188,28 +188,29 @@ def main():
                         st.warning("Please upload both a CSV file and images.")
 
             with tab2:
-                st.title("Generate Image Embeddings for the new products")
-                bucket_name = "damg7245-asng-team4"  # Hardcoded bucket name
-                csv_folder_name = "product_catalog"
-                image_folder_name = "product_images"
+                st.write("Coming Soon")
+                # st.title("Generate Image Embeddings for the new products")
+                # bucket_name = "damg7245-asng-team4"  # Hardcoded bucket name
+                # csv_folder_name = "product_catalog"
+                # image_folder_name = "product_images"
 
-                uploaded_csv = st.file_uploader(
-                    "Choose a CSV file", type="csv", key="uploader_bt_2"
-                )
-                df_without_embedding = pd.read_csv(uploaded_csv)
-                df_w_embeddings = generate_csv_embedding(df_without_embedding)
-                csv_e = df_w_embeddings.to_csv(index=False)
+                # uploaded_csv = st.file_uploader(
+                #     "Choose a CSV file", type="csv", key="uploader_bt_2"
+                # )
+                # df_without_embedding = pd.read_csv(uploaded_csv)
+                # df_w_embeddings = generate_csv_embedding(df_without_embedding)
+                # csv_e = df_w_embeddings.to_csv(index=False)
 
-                with open("temp_file.csv", "w") as file:
-                    file.write(csv_e)
+                # with open("temp_file.csv", "w") as file:
+                #     file.write(csv_e)
 
-                # Streamlit download button
-                st.download_button(
-                    label="Download CSV",
-                    data=csv_e,
-                    file_name="data.csv",
-                    mime="text/csv",
-                )
+                # # Streamlit download button
+                # st.download_button(
+                #     label="Download CSV",
+                #     data=csv_e,
+                #     file_name="data.csv",
+                #     mime="text/csv",
+                # )
 
 
 def validate_csv(uploaded_csv):
