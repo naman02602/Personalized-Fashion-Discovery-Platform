@@ -25,7 +25,8 @@ index = pinecone.Index(index_name="damg7245-project")
 def search_similar_items(embedding, top_k=3):
     # Convert ndarray embedding to a list for Pinecone
     embedding_list = embedding.tolist()
-
+    # pinecone.init(api_key="6e0b7ddc-cec5-4df7-b06f-78a30dde865a", environment="gcp-starter")
+    index = pinecone.Index(index_name="damg7245-project")
     # Query Pinecone for similar items
     query_results = index.query(embedding_list, top_k=top_k, include_metadata=True)
     # print(query_results)
