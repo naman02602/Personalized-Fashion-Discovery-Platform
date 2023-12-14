@@ -4,11 +4,20 @@ import boto3
 from streamlit_aws import upload_file_to_s3
 import pandas as pd
 import io
-
+from sqlalchemy import create_engine
 from chatbot import show_chatbot
-from catalog_w_embedding import generate_csv_embedding
+from personalized_feed import show_feed
 
 FASTAPI_SERVICE_URL = "http://127.0.0.1:8000"
+
+
+def create_db_connection(db_url):
+    engine = create_engine(db_url)
+    return engine.connect()
+
+
+db_url = "mysql+pymysql://root:root123@34.68.249.238/buyer"
+connection = create_db_connection(db_url)
 
 
 def logout():
@@ -91,7 +100,7 @@ def main():
         st.title("Welcome to the Buyer Home Page!")  # Home page after login
         tab1, tab2 = st.tabs(["Personalized feed", "Chatbot"])
         with tab1:
-            show_wishlist(st.session_state["username"], st.session_state["firstname"])
+            show_feed(st.session_state["username"], st.session_state["firstname"])
 
         with tab2:
             show_chatbot(st.session_state["username"])
@@ -110,7 +119,7 @@ def main():
 
         if user_role == "Store Owner/Catalog Manager":
             logout()
-            tab1, tab2 = st.tabs(["Update Catalog", "Generate Catalog w Embeddings"])
+            tab1, tab2 = st.tabs(["Catalog Management", "Templates and Instructions"])
             with tab1:
                 s3_client = boto3.client(
                     service_name="s3",
@@ -189,6 +198,15 @@ def main():
 
             with tab2:
                 st.write("Coming Soon")
+                # Your modified Google Drive direct download link
+                google_drive_link = "https://drive.google.com/uc?export=download&id=1U7626kb6D__vwR-gOffo1GBdOj0JpmYJ"
+
+                # Button in Streamlit
+                if st.button("Download template CSV File"):
+                    st.markdown(
+                        f"[Click here to download the template]({google_drive_link})",
+                        unsafe_allow_html=True,
+                    )
                 # st.title("Generate Image Embeddings for the new products")
                 # bucket_name = "damg7245-asng-team4"  # Hardcoded bucket name
                 # csv_folder_name = "product_catalog"
@@ -234,10 +252,6 @@ def validate_csv(uploaded_csv):
     if not required_columns.issubset(df.columns):
         return False, "Missing required columns in CSV."
     return True, "CSV validation successful."
-
-
-def show_wishlist(username: str, firstname: str):
-    st.write(f"Welcome to the app: {firstname}")
 
 
 if __name__ == "__main__":
