@@ -92,14 +92,16 @@ def show_chatbot(username: str):
                     # Add 'Add to Wishlist' button with a unique key
                 if st.button("Add to Wishlist", key=f"wishlist_{match['id']}"):
                     pid = match["id"]
-                    record_wishlist(username, pid, connection)
+                    record_wishlist(username, pid)
                     st.write(f"Added ID: {match['id']} to wishlist")
+                    st.experimental_rerun()
 
-        record_search(username, first_product_cat, connection)
+        record_search(username, first_product_cat)
 
 
-def record_wishlist(username, pid, connection):
+def record_wishlist(username, pid):
     transaction = None  # Initialize transaction to None
+    connection = create_db_connection(db_url)
     try:
         transaction = connection.begin()
         # SQL query to insert the record
@@ -110,10 +112,13 @@ def record_wishlist(username, pid, connection):
         print(f"Error: {e}")
         if transaction:
             transaction.rollback()
+    finally:
+        connection.close()
 
 
-def record_search(username, query, connection):
+def record_search(username, query):
     transaction = None  # Initialize transaction to None
+    connection = create_db_connection(db_url)
     try:
         transaction = connection.begin()
         # SQL query to insert the record
@@ -124,6 +129,8 @@ def record_search(username, query, connection):
         print(f"Error: {e}")
         if transaction:
             transaction.rollback()
+    finally:
+        connection.close()
 
 
 def get_image_embedding(image):

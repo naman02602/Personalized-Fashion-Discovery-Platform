@@ -61,7 +61,7 @@ def show_feed(username: str, firstname: str):
         st.write("No search history till now.")
 
     st.write("Wishlist")
-    wishlist = fetch_wishlist(username, connection)
+    wishlist = fetch_wishlist(username)
     if wishlist is not None:
         st.write(wishlist)
     else:
@@ -69,8 +69,10 @@ def show_feed(username: str, firstname: str):
 
 
 def fetch_latest_search(username, connection):
+    connection = create_db_connection(db_url)
     try:
         # SQL query to select the latest record
+
         connection.begin()
         sql = """
         SELECT search_query 
@@ -90,9 +92,12 @@ def fetch_latest_search(username, connection):
     except Exception as e:
         print(f"Error: {e}")
         return None
+    finally:
+        connection.close()
 
 
-def fetch_wishlist(username, connection):
+def fetch_wishlist(username):
+    connection = create_db_connection(db_url)
     try:
         # SQL query to select the latest record
         connection.begin()
@@ -113,6 +118,8 @@ def fetch_wishlist(username, connection):
     except Exception as e:
         print(f"Error: {e}")
         return None
+    finally:
+        connection.close()
 
 
 # Function to query Pinecone and fetch records based on a filter

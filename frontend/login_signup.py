@@ -99,10 +99,10 @@ def main():
             st.experimental_rerun()
         st.title("Welcome to the Buyer Home Page!")  # Home page after login
         tab1, tab2 = st.tabs(["Personalized feed", "Chatbot"])
-        with tab1:
+        with tab2:
             show_feed(st.session_state["username"], st.session_state["firstname"])
 
-        with tab2:
+        with tab1:
             show_chatbot(st.session_state["username"])
 
     else:
