@@ -119,6 +119,9 @@ def main():
 
         if user_role == "Store Owner/Catalog Manager":
             logout()
+            username = st.text_input("Username")
+            password = st.text_input("Password", type="password")
+
             tab1, tab2 = st.tabs(["Catalog Management", "Templates and Instructions"])
             with tab1:
                 s3_client = boto3.client(
@@ -141,61 +144,63 @@ def main():
                 )
 
                 if st.button("Validate and Upload to S3"):
-                    if uploaded_csv is not None and uploaded_files:
-                        csv_valid, csv_message = validate_csv(uploaded_csv)
-                        st.write(csv_message)
-                        try:
-                            df = pd.read_csv(uploaded_csv)
-                            print(len(uploaded_files))
-                            print(len(df))
-                            if len(df) != len(uploaded_files):
-                                st.error(
-                                    "The number of records in the CSV does not match the number of uploaded images."
-                                )
-                            else:
-                                success = upload_file_to_s3(
-                                    s3_client,
-                                    bucket_name,
-                                    uploaded_csv,
-                                    csv_folder_name,
-                                    uploaded_csv.name,
-                                )
-                                if success:
-                                    print(
-                                        f"File {uploaded_csv.name} successfully uploaded to {bucket_name}/{csv_folder_name}"
+                    if username == "master" and password == "root":
+                        if uploaded_csv is not None and uploaded_files:
+                            csv_valid, csv_message = validate_csv(uploaded_csv)
+                            st.write(csv_message)
+                            try:
+                                df = pd.read_csv(uploaded_csv)
+                                print(len(uploaded_files))
+                                print(len(df))
+                                if len(df) != len(uploaded_files):
+                                    st.error(
+                                        "The number of records in the CSV does not match the number of uploaded images."
                                     )
-
                                 else:
-                                    st.error("Failed to upload file to S3.")
-
-                                if uploaded_files:
-                                    for uploaded_file in uploaded_files:
-                                        # Show details of the file
-                                        st.write("Filename:", uploaded_file.name)
-                                        # Upload file to S3
-                                        success = upload_file_to_s3(
-                                            s3_client,
-                                            bucket_name,
-                                            uploaded_file,
-                                            image_folder_name,
-                                            uploaded_file.name,
+                                    success = upload_file_to_s3(
+                                        s3_client,
+                                        bucket_name,
+                                        uploaded_csv,
+                                        csv_folder_name,
+                                        uploaded_csv.name,
+                                    )
+                                    if success:
+                                        print(
+                                            f"File {uploaded_csv.name} successfully uploaded to {bucket_name}/{csv_folder_name}"
                                         )
-                                        if success:
-                                            print(
-                                                f"Files successfully uploaded to {bucket_name}/{image_folder_name}"
-                                            )
-                                        else:
-                                            st.error(
-                                                f"Failed to upload file {uploaded_file.name} to S3."
-                                            )
 
-                                # Image upload logic for each file in uploaded_files
-                                st.success("Files successfully uploaded to S3.")
-                        except Exception as e:
-                            st.error(f"Error processing CSV file: {e}")
+                                    else:
+                                        st.error("Failed to upload file to S3.")
+
+                                    if uploaded_files:
+                                        for uploaded_file in uploaded_files:
+                                            # Show details of the file
+                                            st.write("Filename:", uploaded_file.name)
+                                            # Upload file to S3
+                                            success = upload_file_to_s3(
+                                                s3_client,
+                                                bucket_name,
+                                                uploaded_file,
+                                                image_folder_name,
+                                                uploaded_file.name,
+                                            )
+                                            if success:
+                                                print(
+                                                    f"Files successfully uploaded to {bucket_name}/{image_folder_name}"
+                                                )
+                                            else:
+                                                st.error(
+                                                    f"Failed to upload file {uploaded_file.name} to S3."
+                                                )
+
+                                    # Image upload logic for each file in uploaded_files
+                                    st.success("Files successfully uploaded to S3.")
+                            except Exception as e:
+                                st.error(f"Error processing CSV file: {e}")
+                        else:
+                            st.warning("Please upload both a CSV file and images.")
                     else:
-                        st.warning("Please upload both a CSV file and images.")
-
+                        st.error("Unauthorised attempt to access catalog")
             with tab2:
                 st.write("Coming Soon")
                 # Your modified Google Drive direct download link
@@ -207,28 +212,6 @@ def main():
                         f"[Click here to download the template]({google_drive_link})",
                         unsafe_allow_html=True,
                     )
-                # st.title("Generate Image Embeddings for the new products")
-                # bucket_name = "damg7245-asng-team4"  # Hardcoded bucket name
-                # csv_folder_name = "product_catalog"
-                # image_folder_name = "product_images"
-
-                # uploaded_csv = st.file_uploader(
-                #     "Choose a CSV file", type="csv", key="uploader_bt_2"
-                # )
-                # df_without_embedding = pd.read_csv(uploaded_csv)
-                # df_w_embeddings = generate_csv_embedding(df_without_embedding)
-                # csv_e = df_w_embeddings.to_csv(index=False)
-
-                # with open("temp_file.csv", "w") as file:
-                #     file.write(csv_e)
-
-                # # Streamlit download button
-                # st.download_button(
-                #     label="Download CSV",
-                #     data=csv_e,
-                #     file_name="data.csv",
-                #     mime="text/csv",
-                # )
 
 
 def validate_csv(uploaded_csv):
