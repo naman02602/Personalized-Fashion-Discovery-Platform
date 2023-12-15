@@ -5,6 +5,3 @@ Pillow
 torch
 transformers
 boto3
-pinecone
-smtplib
-ssl

@@ -1,0 +1,11 @@
+streamlit
+langchain
+transformers
+openai
+torch
+boto3
+pinecone-client
+requests
+pymysql
+python-dotenv
+sqlalchemy

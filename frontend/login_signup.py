@@ -10,9 +10,9 @@ from personalized_feed import show_feed
 import pinecone
 from botocore.exceptions import ClientError
 from testt import main as test_main
+import os
 
-
-FASTAPI_SERVICE_URL = "http://127.0.0.1:8000"
+FASTAPI_SERVICE_URL = os.getenv("FASTAPI_SERVICE_URL")
 
 pinecone.init(
     api_key="6e0b7ddc-cec5-4df7-b06f-78a30dde865a",
