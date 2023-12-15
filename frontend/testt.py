@@ -3,8 +3,12 @@ import streamlit as st
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 import boto3
+from dotenv import load_dotenv
+import os
 
-openai_api_key = "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"
+load_dotenv()
+
+openai_api_key = os.getenv("OPENAI_API_KEY")
 
 from transformers import CLIPTokenizerFast, CLIPProcessor, CLIPModel
 import torch
@@ -19,8 +23,8 @@ tokenizer = CLIPTokenizerFast.from_pretrained(model_id)
 s3_client = boto3.client(
     service_name="s3",
     region_name="us-east-1",
-    aws_access_key_id="AKIA5IE7JCG4E76C7THC",
-    aws_secret_access_key="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",
+    aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
+    aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
 )
 
 aiprompt = [
