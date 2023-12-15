@@ -2,14 +2,6 @@ import streamlit as st
 
 from io import BytesIO
 
-# Initialize the boto3 S3 client with hardcoded credentials
-# s3_client = boto3.client(
-#     service_name="s3",
-#     region_name="us-east-1",
-#     aws_access_key_id="AKIA37JWDCIQ6ZID6PVM",
-#     aws_secret_access_key="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",
-# )
-
 
 def upload_file_to_s3(s3_client, bucket_name, file, folder_name, file_name):
     """

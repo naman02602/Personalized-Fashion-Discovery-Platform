@@ -5,6 +5,10 @@ import pinecone
 import boto3
 from PIL import Image
 import io
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 
 def create_db_connection(db_url):

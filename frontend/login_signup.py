@@ -11,7 +11,10 @@ import pinecone
 from botocore.exceptions import ClientError
 from testt import main as test_main
 import os
+from dotenv import load_dotenv
 
+
+load_dotenv()
 FASTAPI_SERVICE_URL = os.getenv("FASTAPI_SERVICE_URL")
 
 pinecone.init(
@@ -101,19 +104,25 @@ def main():
         st.session_state["logged_in"] = False
         st.session_state["role"] = None
 
-    st.title("DAMG-7245 Final Project")
+    st.title("StyleLink-Personalized Fashion Discovery :dress: :jeans: ")
 
     if st.session_state["logged_in"]:
         if st.sidebar.button("Logout"):
             logout()
             st.experimental_rerun()
-        st.title("Welcome to the Buyer Home Page!")  # Home page after login
-        tab1, tab2, tab3 = st.tabs(["Image Search", "Chatbot", "Personalized Feed"])
-
-        with tab1:
-            show_chatbot(st.session_state["username"])
+        # st.title("!")  # Home page after login
+        tab1, tab2, tab3 = st.tabs(
+            [
+                "Chatbot :robot_face: ",
+                "Image Search :male-detective: ",
+                "Personalized Feed",
+            ]
+        )
 
         with tab2:
+            show_chatbot(st.session_state["username"])
+
+        with tab1:
             test_main()
 
         with tab3:
@@ -139,7 +148,7 @@ def main():
             tab1, tab2, tab3 = st.tabs(
                 [
                     "Catalog Management(add/update)",
-                    "Delete Product",
+                    "Delete Product :x: ",
                     "Templates and Instructions",
                 ]
             )
@@ -154,7 +163,7 @@ def main():
                 st.title("Update Product Catalog (via S3)")
                 bucket_name = "damg7245-4"  # Hardcoded bucket name
                 csv_folder_name = "product_catalog"
-                image_folder_name = "product_images"
+                image_folder_name = "Images"
 
                 uploaded_csv = st.file_uploader("Choose a CSV file", type="csv")
                 uploaded_files = st.file_uploader(
@@ -229,7 +238,7 @@ def main():
                     # Display a warning message
                     st.warning("Please enter Product ID to continue.")
                     # Disable further actions
-                    st.stop()
+
                 else:
                     # Continue with the rest of your code
                     # For example, if you have a button to delete products:
@@ -239,15 +248,15 @@ def main():
                             st.success(message)
                         else:
                             st.error(message)
-                delete_images_from_s3("damg7245-4", product_ids)
+                        delete_images_from_s3("damg7245-4", product_ids)
 
             with tab3:
-                st.write("Coming Soon")
                 # Your modified Google Drive direct download link
                 google_drive_link = "https://drive.google.com/uc?export=download&id=1U7626kb6D__vwR-gOffo1GBdOj0JpmYJ"
 
                 # Button in Streamlit
                 if st.button("Download template CSV File"):
+                    st.write("Download the template for updating the catalog dataset. ")
                     st.markdown(
                         f"[Click here to download the template]({google_drive_link})",
                         unsafe_allow_html=True,

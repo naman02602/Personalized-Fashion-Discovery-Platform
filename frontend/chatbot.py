@@ -8,18 +8,24 @@ from transformers import CLIPTokenizerFast, CLIPProcessor, CLIPModel
 import pinecone
 import boto3
 import os
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 # model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
 # processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
 
 
-def create_db_connection(db_url):
-    engine = create_engine(db_url)
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+
+def create_db_connection(DATABASE_URL):
+    print(DATABASE_URL)
+    engine = create_engine(DATABASE_URL)
     return engine.connect()
 
 
-db_url = os.getenv("DATABASE_URL")
-connection = create_db_connection(db_url)
+connection = create_db_connection(DATABASE_URL)
 pinecone.init(api_key=os.getenv("PINECONE_API_KEY"), environment="gcp-starter")
 index = pinecone.Index(index_name="damg7245-project")
 
@@ -200,7 +206,7 @@ def show_chatbot(username: str):
 
 def record_wishlist(username, pid):
     transaction = None  # Initialize transaction to None
-    connection = create_db_connection(db_url)
+    connection = create_db_connection(DATABASE_URL)
     try:
         transaction = connection.begin()
         # SQL query to insert the record
@@ -217,7 +223,7 @@ def record_wishlist(username, pid):
 
 def record_search(username, query):
     transaction = None  # Initialize transaction to None
-    connection = create_db_connection(db_url)
+    connection = create_db_connection(DATABASE_URL)
     try:
         transaction = connection.begin()
         # SQL query to insert the record
