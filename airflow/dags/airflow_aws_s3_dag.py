@@ -153,7 +153,7 @@ def read_csv_and_get_embeddings(**kwargs):
 
 def insert_vectors_in_batches(**kwargs):
     # pinecone_api_key = os.environ["PINECONE_API_KEY"]
-    pinecone_api_key = Variable.get('pinecone_api_key')
+    pinecone_api_key = Variable.get('PINECONE_API_KEY')
 
     pinecone.init(api_key=pinecone_api_key, environment="gcp-starter")
     index = pinecone.Index(index_name="damg7245-project")
@@ -251,13 +251,10 @@ def send_email_functionality():
     # Defining the subject
     subject = 'Catalog Successfully Updated'
 
-    # Getting the latest date and time
-    time = datetime.datetime.now()
-
     # Defining the body of the mail
     body = f"""
     Hello,\n
-    I hope this message finds you well. I wanted to inform you that the images you recently uploaded have been successfully added to your catalog at {time}. You can view them to ensure everything looks accurate.
+    I hope this message finds you well. I wanted to inform you that the images you recently uploaded have been successfully added to your catalog. You can view them to ensure everything looks accurate.
     """
 
     em = EmailMessage()
