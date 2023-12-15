@@ -186,6 +186,9 @@ def main():
                                         "The number of records in the CSV does not match the number of uploaded images."
                                     )
                                 else:
+                                    print("records in csv:")
+                                    print(uploaded_csv)
+                                    uploaded_csv.seek(0)
                                     success = upload_file_to_s3(
                                         s3_client,
                                         bucket_name,
