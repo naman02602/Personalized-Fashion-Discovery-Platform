@@ -1,0 +1,10 @@
+pinecone-client
+openai
+requests
+Pillow
+torch
+transformers
+boto3
+pinecone
+smtplib
+ssl
