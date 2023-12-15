@@ -10,6 +10,7 @@
 The challenge in contemporary online fashion retail lies in meeting the visual and style-centric expectations of consumers. This project addresses the gap between consumer preferences and current online store offerings by introducing a one-stop solution for small-scale platforms. Users can upload images or input text to specify clothing preferences, receiving personalized recommendations through advanced image recognition and natural language processing. Vendors benefit from intuitive catalog management tools. The technology stack includes orchestration, cloud computation, web application development, dockerization, embedding generation, database querying, and deployment, aiming for a seamless user experience. Limitations include a focus on small-scale platforms, recommendation accuracy tied to database quality, and the need for continuous updates.
 
 ## Architecture Diagram
+![download](https://github.com/BigDataIA-Fall2023-Team4/Final_Project/assets/113845871/2b443608-cec2-48e4-a024-44778b9cca1f)
 
 
 ## Technology Stack
@@ -28,15 +29,31 @@ The challenge in contemporary online fashion retail lies in meeting the visual a
 
 
 ## Running the Application
+- The application contains two roles to authenticate, the first one being the application user or potential buyer and the second one as the vendor or application owner.
+- New users can sign up then log in and old users can directly login with their registered credentials. The vendor role is pre-assigned a credential to use that for accessing the catalog.
+- The user has access to search for the desired products either by uploading a similar image or by describing the product as a text to the chatbot
+- The user can also see the last seen products which are recorded in a SQL database while the user browses the application
+- The product search feature converts the user’s input into 512 dimension embeddings to query over the Pinecone vector database and displays back the top three similar products available in the product catalog
+- The vendor can use this application to either add more products in batch by uploading a CSV file with product information and images or delete any products by feeding its product id
+- The application also validates if the product information in CSV file is consistent with the product images uploaded by the user
 
 
 ## References:
+- ChatGPT: https://chat.openai.com/
+- LangChain: https://python.langchain.com/docs/get_started/introduction
+- OpenAI CLIP: https://towardsdatascience.com/quick-fire-guide-to-multi-modal-ml-with-openais-clip-2dad7e398ac0 
+- Fast API: https://fastapi.tiangolo.com/
+- Airflow: https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dags.html
+- Pinecone: https://www.pinecone.io/learn/vector-database/
+- Docker: https://www.docker.com/#
+- JWT Tokens: https://jwt.io/introduction
+- ScraperAPI: https://www.scraperapi.com/blog/how-to-scrape-amazon-product-data/ 
 
 
 ## Team Contribution:
 
 | Name            | Contribution % | Contributions |
 |-----------------|----------------|---------------|
-| Naman Gupta     |     33.3%      |             |
-| Jagruti Agrawal |     33.3%      |             |
-| Divyesh Rajput  |     33.3%      |             |
+| Naman Gupta     |     33.3%      | Architecture Planning, OpenAI's CLIP Implementation, Database Querying, Data Scraping, ChatBot Development, Documentation            |
+| Jagruti Agrawal |     33.3%      | Architecture Planning, LangChain Implementation, Catalog Management Implementation, VM Deployment and Dockerization, Documentation           |
+| Divyesh Rajput  |     33.3%      | Architecture Planning, Airflow Pipeline Implementation, Application UI development, API Endpoints Building            |
