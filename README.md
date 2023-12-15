@@ -10,7 +10,8 @@
 The challenge in contemporary online fashion retail lies in meeting the visual and style-centric expectations of consumers. This project addresses the gap between consumer preferences and current online store offerings by introducing a one-stop solution for small-scale platforms. Users can upload images or input text to specify clothing preferences, receiving personalized recommendations through advanced image recognition and natural language processing. Vendors benefit from intuitive catalog management tools. The technology stack includes orchestration, cloud computation, web application development, dockerization, embedding generation, database querying, and deployment, aiming for a seamless user experience. Limitations include a focus on small-scale platforms, recommendation accuracy tied to database quality, and the need for continuous updates.
 
 ## Architecture Diagram
-![download](https://github.com/BigDataIA-Fall2023-Team4/Final_Project/assets/113845871/2b443608-cec2-48e4-a024-44778b9cca1f)
+![fashion_discovery_platform](https://github.com/BigDataIA-Fall2023-Team4/Final_Project/assets/113845871/77d882dc-9be0-48f5-81ae-e6ce9938dfbc)
+
 
 
 ## Technology Stack
