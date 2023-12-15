@@ -3,9 +3,9 @@
 ## Application Links
 [![Codelabs](https://img.shields.io/badge/Codelabs-blue?style=for-the-badge)](https://codelabs-preview.appspot.com/?file_id=1fbWTNJO9v0mllZLa48zSFKu5GM6kTl0HLQQcBGkoPVE/edit#0)
 
-[![Video](https://img.shields.io/badge/Video-CC6699?style=for-the-badge)]()
+[![Video](https://img.shields.io/badge/Video-CC6699?style=for-the-badge)](https://www.youtube.com/watch?v=_0TWwnpgJ0c)
 
-[![Application Link](https://img.shields.io/badge/Application-green?style=for-the-badge)]()
+[![Application Link](https://img.shields.io/badge/Application-green?style=for-the-badge)](http://34.122.119.16:8501/)
 
 ## Problem Statement
 
