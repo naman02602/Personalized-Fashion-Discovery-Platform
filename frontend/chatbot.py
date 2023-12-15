@@ -73,6 +73,7 @@ def show_chatbot(username: str):
         results = search_similar_items(embedding)
         # print(results)
 
+        # Check for product category outside the button click
         first_product_cat = None
 
         # Create 3 columns for the metadata of the 3 closest products
@@ -102,6 +103,14 @@ def show_chatbot(username: str):
                 except Exception as e:
                     st.write("Error loading image:", e)
                 # -------------------------------------------------------------------------------------------->end code block to get images
+                metadata = match.get("metadata", None)
+                if metadata:
+                    for key, value in metadata.items():
+                        # Store the product_cat of the first most similar item
+                        if i == 0 and key == "product_cat":
+                            first_product_cat = value
+                            break  # Break out of the loop once the first product_cat is found
+
                 if st.button("View Info", key=f"wishlistk_{match['id']}"):
                     metadata = match.get("metadata", None)
                     if metadata:
@@ -114,7 +123,7 @@ def show_chatbot(username: str):
                             # Store the product_cat of the first most similar item
                             if i == 0 and key == "product_cat":
                                 first_product_cat = value
-
+                            print(first_product_cat)
                     else:
                         st.write("No metadata available.")
 

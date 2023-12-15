@@ -1,5 +1,5 @@
 import streamlit as st
-import boto3
+
 from io import BytesIO
 
 # Initialize the boto3 S3 client with hardcoded credentials

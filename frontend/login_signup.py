@@ -7,6 +7,7 @@ import io
 from sqlalchemy import create_engine
 from chatbot import show_chatbot
 from personalized_feed import show_feed
+import pinecone
 
 FASTAPI_SERVICE_URL = "http://127.0.0.1:8000"
 
@@ -126,7 +127,13 @@ def main():
             username = st.text_input("Username")
             password = st.text_input("Password", type="password")
 
-            tab1, tab2 = st.tabs(["Catalog Management", "Templates and Instructions"])
+            tab1, tab2, tab3 = st.tabs(
+                [
+                    "Catalog Management(add/update)",
+                    "Delete Product",
+                    "Templates and Instructions",
+                ]
+            )
             with tab1:
                 s3_client = boto3.client(
                     service_name="s3",
@@ -206,6 +213,26 @@ def main():
                     else:
                         st.error("Unauthorised attempt to access catalog")
             with tab2:
+                st.write("Delete Product from Catalog(Pinecone)")
+                pinecone.init(
+                    api_key="6e0b7ddc-cec5-4df7-b06f-78a30dde865a",
+                    environment="gcp-starter",
+                )
+                index = pinecone.Index(index_name="damg7245-project")
+                product_ids = st.text_input("Enter Product IDs (separated by commas):")
+
+                # Delete button
+                if st.button("Delete Products"):
+                    delete_products(product_ids)
+                    st.success("Products Deleted Successfully")
+
+                def delete_products(product_ids):
+                    # Split the input string by commas and strip whitespace
+                    ids = [id.strip() for id in product_ids.split(",")]
+                    # Perform the delete operation
+                    index.delete(ids)
+
+            with tab3:
                 st.write("Coming Soon")
                 # Your modified Google Drive direct download link
                 google_drive_link = "https://drive.google.com/uc?export=download&id=1U7626kb6D__vwR-gOffo1GBdOj0JpmYJ"
