@@ -8,8 +8,17 @@ from sqlalchemy import create_engine
 from chatbot import show_chatbot
 from personalized_feed import show_feed
 import pinecone
+from botocore.exceptions import ClientError
+from testt import main as test_main
+
 
 FASTAPI_SERVICE_URL = "http://127.0.0.1:8000"
+
+pinecone.init(
+    api_key="6e0b7ddc-cec5-4df7-b06f-78a30dde865a",
+    environment="gcp-starter",
+)
+index = pinecone.Index(index_name="damg7245-project")
 
 
 def create_db_connection(db_url):
@@ -105,7 +114,7 @@ def main():
             show_chatbot(st.session_state["username"])
 
         with tab2:
-            print("coming soon")
+            test_main()
 
         with tab3:
             show_feed(st.session_state["username"], st.session_state["firstname"])
@@ -214,23 +223,23 @@ def main():
                         st.error("Unauthorised attempt to access catalog")
             with tab2:
                 st.write("Delete Product from Catalog(Pinecone)")
-                pinecone.init(
-                    api_key="6e0b7ddc-cec5-4df7-b06f-78a30dde865a",
-                    environment="gcp-starter",
-                )
-                index = pinecone.Index(index_name="damg7245-project")
+
                 product_ids = st.text_input("Enter Product IDs (separated by commas):")
-
-                # Delete button
-                if st.button("Delete Products"):
-                    delete_products(product_ids)
-                    st.success("Products Deleted Successfully")
-
-                def delete_products(product_ids):
-                    # Split the input string by commas and strip whitespace
-                    ids = [id.strip() for id in product_ids.split(",")]
-                    # Perform the delete operation
-                    index.delete(ids)
+                if not product_ids:
+                    # Display a warning message
+                    st.warning("Please enter Product ID to continue.")
+                    # Disable further actions
+                    st.stop()
+                else:
+                    # Continue with the rest of your code
+                    # For example, if you have a button to delete products:
+                    if st.button("Delete Products"):
+                        success, message = delete_products(product_ids)
+                        if success:
+                            st.success(message)
+                        else:
+                            st.error(message)
+                delete_images_from_s3("damg7245-4", product_ids)
 
             with tab3:
                 st.write("Coming Soon")
@@ -266,6 +275,62 @@ def validate_csv(uploaded_csv):
     if not required_columns.issubset(df.columns):
         return False, "Missing required columns in CSV."
     return True, "CSV validation successful."
+
+
+def delete_products(product_ids):
+    delete_product_list = [pid.strip() for pid in product_ids.split(",") if pid.strip()]
+    print("Product IDs to delete:", delete_product_list)
+
+    if not delete_product_list:
+        return False, "No product IDs provided."
+
+    try:
+        # Perform the delete operation
+        response = index.delete(ids=delete_product_list)
+        # print("Delete response:", response)
+        if response == {}:
+            return True, "Deletion was successful."
+
+        # Here you might need to check the response structure to confirm deletion
+        else:
+            return False, "Deletion was not successful."
+    except Exception as e:
+        return False, f"Error in deletion: {e}"
+
+
+def delete_images_from_s3(bucket_name, product_ids_str):
+    # Initialize the S3 client
+    s3_client = boto3.client(
+        service_name="s3",
+        region_name="us-east-1",
+        aws_access_key_id="AKIA5IE7JCG4E76C7THC",
+        aws_secret_access_key="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",
+    )
+
+    # Split the input string by commas and strip whitespace
+    product_ids = [pid.strip() for pid in product_ids_str.split(",") if pid.strip()]
+
+    # Store results
+    delete_results = {"success": [], "failed": []}
+
+    # Iterate over the product IDs and delete each corresponding image
+    for pid in product_ids:
+        image_key = f"{pid}.jpg"  # Construct the key for each image
+
+        try:
+            # Perform the delete operation
+            s3_client.delete_object(Bucket=bucket_name, Key=image_key)
+            print(f"Successfully deleted '{image_key}' from '{bucket_name}'.")
+            delete_results["success"].append(image_key)
+        except ClientError as e:
+            error_message = e.response["Error"]["Message"]
+            print(f"Failed to delete '{image_key}': {error_message}")
+            delete_results["failed"].append((image_key, error_message))
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            delete_results["failed"].append((image_key, str(e)))
+
+    return delete_results
 
 
 if __name__ == "__main__":
