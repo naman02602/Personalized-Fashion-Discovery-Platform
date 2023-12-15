@@ -5,7 +5,7 @@ import os
 
 # Secret key to encode the JWT token
 # SECRET_KEY = os.getenv("SECRET_KEY")
-SECRET_KEY = "1cec38d5294ac1c64bade84febff20713811ff50332870fd8140a600e3245d9f"
+SECRET_KEY = os.getenv("SECRET_KEY")
 # Algorithm used to encode the JWT token
 ALGORITHM = "HS256"
 # Token Expiry time

@@ -12,10 +12,10 @@ def create_db_connection(db_url):
     return engine.connect()
 
 
-db_url = "mysql+pymysql://root:root123@34.68.249.238/buyer"
+db_url = os.getenv("DATABASE_URL")
 connection = create_db_connection(db_url)
 
-pinecone.init(api_key="6e0b7ddc-cec5-4df7-b06f-78a30dde865a", environment="gcp-starter")
+pinecone.init(api_key=os.getenv("PINECONE_API_KEY"), environment="gcp-starter")
 index = pinecone.Index(index_name="damg7245-project")
 
 
@@ -26,8 +26,8 @@ def show_feed(username: str, firstname: str):
     s3_client = boto3.client(
         service_name="s3",
         region_name="us-east-1",
-        aws_access_key_id="AKIA5IE7JCG4E76C7THC",
-        aws_secret_access_key="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",
+        aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
+        aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
     )
 
     if category is not None:

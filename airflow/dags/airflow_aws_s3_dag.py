@@ -19,6 +19,7 @@ import pinecone
 from email.message import EmailMessage
 import ssl
 import smtplib
+from airflow.models import Variable
 
 
 class S3CsvFileSensor(S3KeySensor):
@@ -66,7 +67,7 @@ def get_image_embeddings(**kwargs):
         return s3_client, image_paths
 
     # Replace these with your actual bucket name and image folder path
-    bucket_name = "damg7245-asng-team4"  # Your S3 bucket name
+    bucket_name = "damg7245-4"  # Your S3 bucket name
     folder_prefix = "product_images/"  # Your folder prefix
 
     # Get S3 client and image list
@@ -130,7 +131,7 @@ def read_csv_and_get_embeddings(**kwargs):
 
     # Read the CSV file from S3 into a pandas DataFrame
     csv_buffer = BytesIO()
-    s3_hook.get_key(file_name, bucket_name="damg7245-asng-team4").download_fileobj(
+    s3_hook.get_key(file_name, bucket_name="damg7245-4").download_fileobj(
         csv_buffer
     )
     csv_buffer.seek(0)  # Reset buffer pointer
@@ -152,7 +153,7 @@ def read_csv_and_get_embeddings(**kwargs):
 
 def insert_vectors_in_batches(**kwargs):
     # pinecone_api_key = os.environ["PINECONE_API_KEY"]
-    pinecone_api_key = "6e0b7ddc-cec5-4df7-b06f-78a30dde865a"
+    pinecone_api_key = Variable.get('pinecone_api_key')
 
     pinecone.init(api_key=pinecone_api_key, environment="gcp-starter")
     index = pinecone.Index(index_name="damg7245-project")
@@ -205,10 +206,10 @@ def convert_csv_to_parquet(**kwargs):
     parquet_file_path = f"processed_csv_files/{parquet_file_name}"
 
     # Check if the Parquet file already exists
-    if not s3_hook.check_for_key(parquet_file_path, bucket_name="damg7245-asng-team4"):
+    if not s3_hook.check_for_key(parquet_file_path, bucket_name="damg7245-4"):
         # Read the CSV file from S3 into a pandas DataFrame
         csv_buffer = BytesIO()
-        s3_hook.get_key(file_name, bucket_name="damg7245-asng-team4").download_fileobj(
+        s3_hook.get_key(file_name, bucket_name="damg7245-4").download_fileobj(
             csv_buffer
         )
         csv_buffer.seek(0)  # Reset buffer pointer
@@ -221,7 +222,7 @@ def convert_csv_to_parquet(**kwargs):
 
         # Upload the Parquet file to S3
         s3_hook.load_file_obj(
-            parquet_buffer, parquet_file_path, bucket_name="damg7245-asng-team4"
+            parquet_buffer, parquet_file_path, bucket_name="damg7245-4"
         )
         print(f"Uploaded {parquet_file_name} to {parquet_file_path}")
     else:
@@ -236,13 +237,13 @@ def delete_csv_file(**kwargs):
     s3_hook = S3Hook(aws_conn_id="my_aws_conn")
 
     # Delete the file
-    s3_hook.delete_objects(bucket="damg7245-asng-team4", keys=[file_name])
+    s3_hook.delete_objects(bucket="damg7245-4", keys=[file_name])
     print(f"Deleted {file_name} from S3 bucket")
 
 def send_email_functionality():
     # Email sender details
     email_sender = 'jagruti190600@gmail.com'
-    email_password = 'ewti dofh uxgn myet'
+    email_password = Variable.get("EMAIL_APP_PASSWORD")
 
     # Email receiver details
     email_receiver = 'jagruti1906@gmail.com'
@@ -283,9 +284,8 @@ default_args = {
 # AWS Connection
 conn_id = "my_aws_conn"
 conn_type = "s3"
-login = "AKIA37JWDCIQ6ZID6PVM"
-password = "feZ/DjQtpXcgfmQFyzGQz4cRgvkJP6+svw06FJjK"
-
+login = Variable.get("AWS_ACCESS_KEY_ID")
+password = Variable.get("AWS_SECRET_ACCESS_KEY")
 session = settings.Session()
 new_conn = Connection(
     conn_id=conn_id, conn_type=conn_type, login=login, password=password
@@ -303,7 +303,7 @@ dag = DAG(
 s3_sensor = S3CsvFileSensor(
     task_id="check_s3_for_csv_file",
     bucket_key="product_catalog/",
-    bucket_name="damg7245-asng-team4",
+    bucket_name="damg7245-4",
     aws_conn_id=conn_id,
     # timeout=18 * 60 * 60,
     poke_interval=120 * 60,

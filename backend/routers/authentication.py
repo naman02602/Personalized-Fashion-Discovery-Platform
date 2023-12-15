@@ -27,7 +27,7 @@ from fastapi_service.oauth2 import get_current_user
 import os
 
 # DATABASE_URL = os.getenv("DATABASE_URL")
-DATABASE_URL = "mysql+pymysql://root:root123@34.68.249.238/buyer"
+DATABASE_URL = os.getenv("DATABASE_URL")
 engine = create_engine(DATABASE_URL)
 
 

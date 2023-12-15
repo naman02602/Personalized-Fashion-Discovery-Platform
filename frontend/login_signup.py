@@ -15,7 +15,7 @@ import os
 FASTAPI_SERVICE_URL = os.getenv("FASTAPI_SERVICE_URL")
 
 pinecone.init(
-    api_key="6e0b7ddc-cec5-4df7-b06f-78a30dde865a",
+    api_key=os.getenv("PINECONE_API_KEY"),
     environment="gcp-starter",
 )
 index = pinecone.Index(index_name="damg7245-project")
@@ -26,7 +26,7 @@ def create_db_connection(db_url):
     return engine.connect()
 
 
-db_url = "mysql+pymysql://root:root123@34.68.249.238/buyer"
+db_url = os.getenv("DATABASE_URL")
 connection = create_db_connection(db_url)
 
 
@@ -147,12 +147,12 @@ def main():
                 s3_client = boto3.client(
                     service_name="s3",
                     region_name="us-east-1",
-                    aws_access_key_id="AKIA37JWDCIQ6ZID6PVM",
-                    aws_secret_access_key="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",
+                    aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
+                    aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
                 )
 
                 st.title("Update Product Catalog (via S3)")
-                bucket_name = "damg7245-asng-team4"  # Hardcoded bucket name
+                bucket_name = "damg7245-4"  # Hardcoded bucket name
                 csv_folder_name = "product_catalog"
                 image_folder_name = "product_images"
 
@@ -303,8 +303,8 @@ def delete_images_from_s3(bucket_name, product_ids_str):
     s3_client = boto3.client(
         service_name="s3",
         region_name="us-east-1",
-        aws_access_key_id="AKIA5IE7JCG4E76C7THC",
-        aws_secret_access_key="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",
+        aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
+        aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
     )
 
     # Split the input string by commas and strip whitespace

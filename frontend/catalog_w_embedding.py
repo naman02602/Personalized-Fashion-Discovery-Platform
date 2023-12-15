@@ -38,12 +38,12 @@ def generate_csv_embedding(df):
 
 
 def get_images_from_s3_bucket(
-    bucket_name="damg7245-asng-team4", folder_prefix="product_images/"
+    bucket_name="damg7245-4", folder_prefix="product_images/"
 ):
     s3 = boto3.client(
         "s3",
-        aws_access_key_id="AKIA37JWDCIQ6ZID6PVM",
-        aws_secret_access_key="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",
+        aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
+        aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
     )
 
     # List all objects in the specified folder
@@ -72,7 +72,7 @@ def process_and_get_embeddings_from_s3(model, processor, batch_size, device):
         # load images using PIL
         batch_images = []
         for path in batch_paths:
-            response = s3.get_object(Bucket="damg7245-asng-team4", Key=path)
+            response = s3.get_object(Bucket="damg7245-4", Key=path)
             image_bytes = response["Body"].read()
             image = Image.open(BytesIO(image_bytes)).convert("RGB")
             batch_images.append(image)
