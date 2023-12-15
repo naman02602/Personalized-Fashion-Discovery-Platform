@@ -98,12 +98,16 @@ def main():
             logout()
             st.experimental_rerun()
         st.title("Welcome to the Buyer Home Page!")  # Home page after login
-        tab1, tab2 = st.tabs(["Personalized feed", "Chatbot"])
-        with tab2:
-            show_feed(st.session_state["username"], st.session_state["firstname"])
+        tab1, tab2, tab3 = st.tabs(["Image Search", "Chatbot", "Personalized Feed"])
 
         with tab1:
             show_chatbot(st.session_state["username"])
+
+        with tab2:
+            print("coming soon")
+
+        with tab3:
+            show_feed(st.session_state["username"], st.session_state["firstname"])
 
     else:
         user_role = st.sidebar.radio(
