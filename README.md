@@ -5,7 +5,7 @@
 
 [![Video](https://img.shields.io/badge/Video-CC6699?style=for-the-badge)](https://www.youtube.com/watch?v=_0TWwnpgJ0c)
 
-[![Application Link](https://img.shields.io/badge/Application-green?style=for-the-badge)](http://34.122.119.16:8501/)
+[![Application Link](https://img.shields.io/badge/Application-green?style=for-the-badge)](http://35.238.105.5:8501/)
 
 ## Problem Statement
 
