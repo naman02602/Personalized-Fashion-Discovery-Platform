@@ -1,4 +1,4 @@
-# Final_Project
+# StyleLink - Personalized Fashion Discovery Platform
 
 ## Application Links
 [![Codelabs](https://img.shields.io/badge/Codelabs-blue?style=for-the-badge)](https://codelabs-preview.appspot.com/?file_id=1fbWTNJO9v0mllZLa48zSFKu5GM6kTl0HLQQcBGkoPVE/edit#0)
